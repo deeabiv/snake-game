@@ -93,10 +93,19 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property rsz_1cell_phone_snake_game() As System.Drawing.Bitmap
+        Friend ReadOnly Property back4() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("rsz_1cell-phone-snake-game", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("back4", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property Eat() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("Eat", resourceCulture)
             End Get
         End Property
         

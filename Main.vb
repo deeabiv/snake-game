@@ -8,6 +8,12 @@ Public Class main
         Dim x As Integer
         Dim y As Integer
     End Structure
+    Private Enum Direction
+        right
+        down
+        left
+        up
+    End Enum
     Public Enum FoodType As Integer
 
         Apple = 0
@@ -23,16 +29,18 @@ Public Class main
     Private Const INITIAL_LENGHT As Integer = 15  'lungimea initiala a sarpelui
     Private Const COLUMN_MAX As Integer = 65  'latimea spatiului de joc
     Private Const ROW_MAX As Integer = 47     'inaltimea spatiului de joc
-
     Private matrix(,) As Rectangle       '
     Private isSnake(,) As Boolean   '
     Private snake As Collection
-    Private snakeHead As Image = RotateImage(Image.FromFile("head2.png"), 180) ' va memora capul sarpelui
+    Private snakeHead As Image = RotateImage(Image.FromFile("head2.png"), 90) ' va memora capul sarpelui
     Private snakeHead1 As Image = Image.FromFile("head2.png")
-    Private snakeBody As Image = Image.FromFile("body.png") ' corpul sarpelui
-    Private snakeTail As Brush = New SolidBrush(Color.Red) 'coada sarpelui
+    Private snakeBody1 As Image = Image.FromFile("body2.png")
+    Private snakeBody As Image = RotateImage(Image.FromFile("body2.png"), 90) ' corpul sarpelui
+    Private snakeTail As Image = RotateImage(Image.FromFile("tail.png"), 180)
+    Private snakeTail1 As Image = Image.FromFile("tail.png")
+    '    Private snakeTail As Brush = New SolidBrush(Color.DarkRed) 'coada sarpelui
     'Private bonus As Image = Image.FromFile("star1.ico")
-    Private backBrush As Brush = New SolidBrush(Color.FromArgb(1, 1, 1)) ' pentru a acoperi la deplasarea sarpelui ultimul dreptunghi
+    Private backBrush As Brush = New SolidBrush(Color.FromArgb(225, 255, 196)) ' pentru a acoperi la deplasarea sarpelui ultimul dreptunghi
     Private CurrentDirection As Direction
     Private background As Bitmap
     Private snakePoints As Integer ' contorizam nr fructelor mancate
@@ -43,6 +51,10 @@ Public Class main
     Private type As String = Nothing  'FREE sau WALL
     Dim check As String = Nothing ' pentru repetarea jocului
     Dim nr As Integer = 0
+    Dim p As Integer = 1
+    Dim q As Integer = 1
+    Dim r As Integer = 1
+    Dim s As Integer = 1
     Dim d As Dictionary(Of FoodType, Image)
 
 
@@ -67,36 +79,13 @@ Public Class main
     End Function
     Public Function GetImageForFoodItem(ByVal ft As FoodType) As Image
 
-        If IsNothing(d) Or Not d.ContainsKey(ft) Then 'd=null
+        If IsNothing(d) Or Not d.ContainsKey(ft) Then
             Return Nothing
         End If
         ' returneaza imaginea
         Return d(ft)
     End Function
-    Private Enum Direction
-        right
-        down
-        left
-        up
-    End Enum
-
-    Private Function GetRotatedImage(ByVal pI As Image) As Image 'neutilizata
-
-        If IsNothing(pI) Then
-            Return Nothing
-        End If
-        If CurrentDirection = 1 Then
-            Return pI
-        ElseIf CurrentDirection = 2 Then
-            Return RotateImage(pI, 180)
-        ElseIf CurrentDirection = 3 Then
-            Return RotateImage(pI, 270)
-        ElseIf CurrentDirection = 4 Then
-            Return RotateImage(pI, 90)
-        End If
-
-        Return Nothing
-    End Function
+    
 
     Public Function RotateImage(ByVal pImage As Image, ByVal pAngle As Integer) As Image
 
@@ -124,11 +113,13 @@ Public Class main
 
         InitiateFoodImages()
 
-        CurrentDirection = Direction.down   'directia de start a sarpelui in jos
+        CurrentDirection = Direction.right   'directia de start a sarpelui in jos
 
         snakePoints = 0
         If check = "Again" Then
-            snakeHead = RotateImage(snakeHead1, 180)
+            snakeHead = RotateImage(snakeHead1, 90)
+            snakeTail = RotateImage(snakeTail1, 90)
+            snakeBody = RotateImage(snakeBody1, 90)
             nr = 0
         End If
         initRectangles()
@@ -136,7 +127,7 @@ Public Class main
         selectRectangles()
         setFood()
         setPoints()
-        tmr.Interval = 50
+        tmr.Interval = 60
         tmr.Enabled = True
 
 
@@ -149,16 +140,15 @@ Public Class main
 
         ReDim matrix(COLUMN_MAX, ROW_MAX)
         ReDim isSnake(COLUMN_MAX, ROW_MAX)
-        'stabilim grosimea sarpelui
         For j = 0 To ROW_MAX
             For i = 0 To COLUMN_MAX
-                matrix(i, j) = New Rectangle((i * 10) + 1, (j * 10) + 1, 9, 9) ' desenam suprafata de joc cu dreptunghiuri de dimensiunea 
+                matrix(i, j) = New Rectangle((i * 19) + 1, (j * 19) + 1, 20, 20) ' desenam suprafata de joc cu dreptunghiuri de dimensiunea 
 
                 isSnake(i, j) = False
             Next
         Next
 
-        '  status.Items("tss0").Text = "Screen Size: " & CStr(COLUMN_MAX) & " X " & CStr(ROW_MAX)
+
 
     End Sub
 
@@ -171,9 +161,8 @@ Public Class main
         Dim bodySnake As strSnake
         snake = New Collection 'aici vom memora sarpele intr/o colectie de structuri
 
-        x = ((COLUMN_MAX) - 10) \ 2 'pozitia sarpelui de start (x,y)
-        y = ((ROW_MAX) - 6) \ 2
-
+        x = 0
+        y = 14
         For i = 1 To INITIAL_LENGHT
             bodySnake.square = matrix(x, y)
             bodySnake.x = x
@@ -184,14 +173,12 @@ Public Class main
 
         snakeLength = INITIAL_LENGHT
         snakeSpeed = 1000
-        status.Items("tssSnakeLength").Text = "Length: " & CStr(snakeLength)
-        status.Items("tssSnakeSpeed").Text = "Speed: " & CStr(snakeSpeed) & "%"
 
     End Sub
 
     Private Sub selectRectangles()
 
-        Dim g As Graphics = Graphics.FromImage(My.Resources.back)
+        Dim g As Graphics = Graphics.FromImage(My.Resources.back4)
         Dim i As Integer
         Dim bodySnake As strSnake
 
@@ -202,11 +189,11 @@ Public Class main
             isSnake(bodySnake.x, bodySnake.y) = True
         Next
         bodySnake = snake(INITIAL_LENGHT)
-        g.FillRectangle(snakeTail, bodySnake.square)
+        g.DrawImage(snakeTail, bodySnake.square)
 
         isSnake(bodySnake.x, bodySnake.y) = True
 
-        background = New Bitmap(My.Resources.back)
+        background = New Bitmap(My.Resources.back4)
 
         g.Dispose()
         Refresh()
@@ -222,18 +209,17 @@ Public Class main
         Dim y As Integer
         Dim g As Graphics = Graphics.FromImage(background)
 
-        x = CInt(Rnd() * COLUMN_MAX)
-        Do While x > COLUMN_MAX Or isSnake(x, y) = True
-            x = CInt(Rnd() * COLUMN_MAX)
+        x = CInt(Rnd() * 33) 'COLUMN_MAX
+        Do While x > 33 Or isSnake(x, y) = True
+            x = CInt(Rnd() * 33)
         Loop
 
-        y = CInt(Rnd() * ROW_MAX)
-        Do While y > ROW_MAX Or y < 2 Or isSnake(x, y) = True
-            y = CInt(Rnd() * ROW_MAX)
+        y = CInt(Rnd() * 24) 'ROW_MAX
+        Do While y > 24 Or y < 2 Or isSnake(x, y) = True
+            y = CInt(Rnd() * 24)
         Loop
 
         food = Matrix(x, y)  'pozitia mancarii 
-        ' status.Items("tss1").Text = "food Location: ( " & CStr(x) & " , " & CStr(y) & " )"
         g.DrawImage(GetImageForFoodItem(GetFoodType()), food)
         Refresh()
         g.Dispose()
@@ -242,17 +228,21 @@ Public Class main
     
 
     Private Sub setPoints()
-        status.Items("tss3").Text = "Total Points: " & CStr(snakePoints)
+        status.Items(0).Text = "Score: " & CStr(snakePoints)
     End Sub
 
     Private Sub main_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-
+        p = 1
+        q = 1
+        r = 1
+        s = 1
         Select Case e.KeyCode
             Case Keys.Down
                 If Not (CurrentDirection = Direction.down Or CurrentDirection = Direction.up) Then
                     CurrentDirection = Direction.down
                     snakeHead = snakeHead1
                     snakeHead = RotateImage(snakeHead, 180)
+                    snakeBody = RotateImage(snakeBody1, 0)
                 End If
 
             Case Keys.Left
@@ -260,6 +250,7 @@ Public Class main
                     CurrentDirection = Direction.left
                     snakeHead = snakeHead1
                     snakeHead = RotateImage(snakeHead, 270)
+                    snakeBody = RotateImage(snakeBody1, 90)
                 End If
 
             Case Keys.Right
@@ -267,12 +258,14 @@ Public Class main
                     CurrentDirection = Direction.right
                     snakeHead = snakeHead1
                     snakeHead = RotateImage(snakeHead, 90)
+                    snakeBody = RotateImage(snakeBody1, 90)
                 End If
 
             Case Keys.Up
                 If Not (CurrentDirection = Direction.up Or CurrentDirection = Direction.down) Then
                     CurrentDirection = Direction.up
                     snakeHead = snakeHead1
+                    snakeBody = RotateImage(snakeBody1, 0)
                 End If
         End Select
 
@@ -285,6 +278,7 @@ Public Class main
     Private Sub moveSnake()
 
         Dim bodySnake As strSnake
+        Dim bodyS As strSnake
         Dim x As Integer
         Dim y As Integer
         Dim rect As Rectangle = New Rectangle()
@@ -294,19 +288,48 @@ Public Class main
 
         ' stergem ultimul dreptunghi
         bodySnake = snake(snake.Count)
-        g.FillRectangle(backBrush, bodySnake.square) ' acoperim ultimul dreptunghi cu culoarea fundalului
+        g.FillRectangle(backBrush, bodySnake.square)
         snake.Remove(snake.Count)
         isSnake(bodySnake.x, bodySnake.y) = False
 
         'plasarea initiala a cozii
 
+        bodyS = snake.Item(snake.Count - 1)
         nr += 1
         If nr >= 14 Then
             bodySnake = snake(snake.Count)
-            g.FillRectangle(snakeTail, bodySnake.square)
-        End If
-        ' Obtinem indexul primului drpetunghi
+            If bodyS.x < bodySnake.x And p = 1 Then
+                If bodyS.x = 0 And bodySnake.x = 33 Then
+                    snakeTail = RotateImage(snakeTail, 0)
+                Else
+                    snakeTail = RotateImage(snakeTail1, 270)
+                    p = 0
+                End If
 
+            ElseIf bodyS.x > bodySnake.x And q = 1 Then
+                If bodyS.x = 33 And bodySnake.x = 0 Then
+                    snakeTail = RotateImage(snakeTail, 0)
+                Else
+                    snakeTail = RotateImage(snakeTail1, 90)
+                    q = 0
+                End If
+            ElseIf bodyS.y > bodySnake.y And r = 1 Then
+                If (bodyS.y = 24 And bodySnake.y = 1) Then
+                    snakeTail = RotateImage(snakeTail, 0)
+                Else
+                    snakeTail = RotateImage(snakeTail1, 180)
+                    r = 0
+                End If
+            ElseIf bodyS.y < bodySnake.y And s = 1 Then
+                If (bodyS.y = 1 And bodySnake.y = 24) Then
+                    snakeTail = RotateImage(snakeTail, 0)
+                Else
+                    snakeTail = RotateImage(snakeTail1, 0)
+                    s = 0
+                End If
+            End If
+            g.DrawImage(snakeTail, bodySnake.square)
+        End If
         bodySnake = snake.Item(1)
 
         g.DrawImage(snakeBody, bodySnake.square)
@@ -318,10 +341,12 @@ Public Class main
             Case Direction.down
                 y = y + 1
                 If type = "FREE" Then
-                    If y > ROW_MAX Then y = 2
+                    If y > 24 Then
+                        y = 1 'ROW_MAX
+                    End If
                 Else
-                    If y > ROW_MAX Then
-                        Dim r = MsgBox("Game Over! Start again?", MsgBoxStyle.YesNo)
+                    If y > 24 Then
+                        Dim r = MsgBox("             Game Over!" & vbCrLf & vbCrLf & " ~  ~  ~  Total Points: " & CStr(snakePoints) & "  ~ ~ ~" & vbCrLf & vbCrLf & "Start again?", MsgBoxStyle.YesNo)
                         If r = vbYes Then
                             initialize()
                             check = "Again"
@@ -335,10 +360,12 @@ Public Class main
             Case Direction.left
                 x = x - 1
                 If type = "FREE" Then
-                    If x < 0 Then x = COLUMN_MAX
+                    If x < 0 Then
+                        x = 33 'COLUMN_MAX
+                    End If
                 Else
                     If x < 0 Then
-                        Dim r = MsgBox("Game Over! Start again?", MsgBoxStyle.YesNo)
+                        Dim r = MsgBox("             Game Over!" & vbCrLf & vbCrLf & " ~  ~  ~  Total Points: " & CStr(snakePoints) & "  ~ ~ ~" & vbCrLf & vbCrLf & "Start again?", MsgBoxStyle.YesNo)
                         If r = vbYes Then
                             check = "Again"
                             initialize()
@@ -352,15 +379,21 @@ Public Class main
             Case Direction.right
                 x = x + 1
                 If type = "FREE" Then
-                    If x > COLUMN_MAX Then x = 0
+                    If x > 33 Then
+                        x = 0 'COLUMN_MAX
+                    End If
                 Else
-                    If x > COLUMN_MAX Then
-                        Dim r = MsgBox("Game Over! Start again?", MsgBoxStyle.YesNo)
+                    If x > 33 Then
+                        Dim r = MsgBox("             Game Over!" & vbCrLf & vbCrLf & " ~  ~  ~  Total Points: " & CStr(snakePoints) & "  ~ ~ ~" & vbCrLf & vbCrLf & "Start again?", MsgBoxStyle.YesNo)
                         If r = vbYes Then
                             check = "Again"
                             initialize()
                             tmr.Enabled = True
                             Return
+
+
+
+
                         Else
                             Close()
 
@@ -370,15 +403,18 @@ Public Class main
             Case Direction.up
                 y = y - 1
                 If type = "FREE" Then
-                    If y - 2 < 0 Then y = ROW_MAX
+                    If y - 1 < 0 Then
+                        y = 24
+                    End If
                 Else
-                    If y - 2 < 0 Then
-                        Dim r = MsgBox("Game Over! Start again?", MsgBoxStyle.YesNo)
+                    If y - 1 < 0 Then
+                        Dim r = MsgBox("             Game Over!" & vbCrLf & vbCrLf & " ~  ~  ~  Total Points: " & CStr(snakePoints) & "  ~ ~ ~" & vbCrLf & vbCrLf & "Start again?", MsgBoxStyle.YesNo)
                         If r = vbYes Then
                             check = "Again"
                             initialize()
                             tmr.Enabled = True
-                            Return
+                            Exit Sub
+
                         Else
                             Close()
 
@@ -390,7 +426,7 @@ Public Class main
         If isSnake(x, y) = True Then
             tmr.Enabled = False
 
-            If MessageBox.Show("Game over! Start again?", "Snake", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = Windows.Forms.DialogResult.Yes Then
+            If MessageBox.Show("             Game Over!" & vbCrLf & vbCrLf & " ~  ~  ~  Total Points: " & CStr(snakePoints) & "  ~ ~ ~" & vbCrLf & vbCrLf & "Start again?", "Snake", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = Windows.Forms.DialogResult.Yes Then
                 check = "Again"
                 initialize()
                 Exit Sub
@@ -400,7 +436,6 @@ Public Class main
 
         End If
 
-        '  status.Items("tss2").Text = "Snake Location: ( " & CStr(x) & " , " & CStr(y) & " )"
 
         rect = matrix(x, y)
 
@@ -409,7 +444,7 @@ Public Class main
         bodySnake.square = rect
         isSnake(x, y) = True
 
-        'SNAKE HEAD
+        'capul sarpelui
         g.DrawImage(snakeHead, bodySnake.square)
         Me.BackgroundImage = background
 
@@ -417,11 +452,13 @@ Public Class main
         snake.Add(bodySnake, , 1)
 
 
-        If Matrix(x, y).Equals(CObj(food)) Then
+        If matrix(x, y).Equals(CObj(food)) Then     ' cand pozitiile capului si ale hranei coincid am mancat un fruct
 
+            My.Computer.Audio.Play(My.Resources.Eat, AudioPlayMode.Background)
             snakePoints += 1 'numara fructele mancate
             setPoints()
-            
+
+
 
             bodySnake = snake.Item(snake.Count)
 
@@ -441,28 +478,20 @@ Public Class main
             End Select
 
             bodySnake.square = matrix(bodySnake.x, bodySnake.y)
-
-
-            'cand mananca
-
-            g.FillRectangle(snakeTail, bodySnake.square)
+            ' g.DrawImage(snakeTail, bodySnake.square)
+            'g.FillRectangle(snakeTail, bodySnake.square)
             Me.BackgroundImage = background
             snake.Add(bodySnake, , , snake.Count)
             snakeLength = snake.Count
-            If tmr.Interval - 2 > 0 Then tmr.Interval -= 2 'marim viteza cu 2
-            ' If tmr.Interval = 1 Then tmr.Interval = 1
-
+            If tmr.Interval - 2 > 0 Then tmr.Interval -= 1 'marim viteza 
             snakeSpeed = 100 + (((50 - tmr.Interval) / 50) * 100) 'calculam cu cat a crescut viteza
-            status.Items("tssSnakeLength").Text = "Length: " & CStr(snakeLength)
-            status.Items("tssSnakeSpeed").Text = "Speed: " & CStr(snakeSpeed) & "%"
+           
 
-            'End If
 
             setFood()
 
         End If
 
-        
         Refresh()
 
         tmr.Enabled = True

@@ -131,9 +131,9 @@
     <None Include="Resources\rsz_start1.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\back2.jpg" />
+    <None Include="bin\Debug\Eat.wav" />
+    <None Include="Resources\back4.bmp" />
     <None Include="Resources\back3.bmp" />
-    <None Include="Resources\rsz_1cell-phone-snake-game.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

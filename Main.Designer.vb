@@ -25,11 +25,6 @@ Partial Class main
         Me.components = New System.ComponentModel.Container()
         Me.tmr = New System.Windows.Forms.Timer(Me.components)
         Me.status = New System.Windows.Forms.StatusStrip()
-        Me.tss0 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.tss1 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.tss2 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.tssSnakeLength = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.tssSnakeSpeed = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tss3 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -49,64 +44,25 @@ Partial Class main
         '
         'status
         '
-        Me.status.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tss0, Me.tss1, Me.tss2, Me.tssSnakeLength, Me.tssSnakeSpeed, Me.tss3})
-        Me.status.Location = New System.Drawing.Point(0, 488)
+        Me.status.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tss3})
+        Me.status.Location = New System.Drawing.Point(0, 480)
+        Me.status.MaximumSize = New System.Drawing.Size(661, 30)
+        Me.status.MinimumSize = New System.Drawing.Size(661, 30)
         Me.status.Name = "status"
         Me.status.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.status.Size = New System.Drawing.Size(661, 22)
+        Me.status.Size = New System.Drawing.Size(661, 30)
         Me.status.TabIndex = 0
         Me.status.Text = "StatusStrip1"
-        '
-        'tss0
-        '
-        Me.tss0.BorderStyle = System.Windows.Forms.Border3DStyle.Etched
-        Me.tss0.Name = "tss0"
-        Me.tss0.Size = New System.Drawing.Size(66, 17)
-        Me.tss0.Text = "Screen Size:"
-        Me.tss0.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.tss0.Visible = False
-        '
-        'tss1
-        '
-        Me.tss1.BorderStyle = System.Windows.Forms.Border3DStyle.Etched
-        Me.tss1.Name = "tss1"
-        Me.tss1.Size = New System.Drawing.Size(83, 17)
-        Me.tss1.Text = "Token Location:"
-        Me.tss1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.tss1.Visible = False
-        '
-        'tss2
-        '
-        Me.tss2.BorderStyle = System.Windows.Forms.Border3DStyle.Raised
-        Me.tss2.Name = "tss2"
-        Me.tss2.Size = New System.Drawing.Size(83, 17)
-        Me.tss2.Text = "Snake Location:"
-        Me.tss2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.tss2.Visible = False
-        '
-        'tssSnakeLength
-        '
-        Me.tssSnakeLength.BorderStyle = System.Windows.Forms.Border3DStyle.Raised
-        Me.tssSnakeLength.Name = "tssSnakeLength"
-        Me.tssSnakeLength.Size = New System.Drawing.Size(76, 17)
-        Me.tssSnakeLength.Text = "Snake Length:"
-        Me.tssSnakeLength.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'tssSnakeSpeed
-        '
-        Me.tssSnakeSpeed.BorderStyle = System.Windows.Forms.Border3DStyle.Raised
-        Me.tssSnakeSpeed.Name = "tssSnakeSpeed"
-        Me.tssSnakeSpeed.Size = New System.Drawing.Size(73, 17)
-        Me.tssSnakeSpeed.Text = "Snake Speed:"
-        Me.tssSnakeSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'tss3
         '
         Me.tss3.BorderStyle = System.Windows.Forms.Border3DStyle.Raised
+        Me.tss3.Font = New System.Drawing.Font("Tempus Sans ITC", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tss3.ForeColor = System.Drawing.SystemColors.ActiveCaption
         Me.tss3.Name = "tss3"
-        Me.tss3.Size = New System.Drawing.Size(497, 17)
+        Me.tss3.Size = New System.Drawing.Size(646, 25)
         Me.tss3.Spring = True
-        Me.tss3.Text = "Total Points:"
+        Me.tss3.Text = "Score:"
         Me.tss3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'MenuStrip1
@@ -114,9 +70,11 @@ Partial Class main
         Me.MenuStrip1.BackColor = System.Drawing.Color.White
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.AboutToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.MaximumSize = New System.Drawing.Size(661, 20)
+        Me.MenuStrip1.MinimumSize = New System.Drawing.Size(661, 20)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.MenuStrip1.Size = New System.Drawing.Size(661, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(661, 20)
         Me.MenuStrip1.TabIndex = 1
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -124,50 +82,50 @@ Partial Class main
         '
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewGameToolStripMenuItem, Me.ExitToolStripMenuItem, Me.PauseToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(35, 20)
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(35, 16)
         Me.FileToolStripMenuItem.Text = "File"
         '
         'NewGameToolStripMenuItem
         '
         Me.NewGameToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BlocToolStripMenuItem, Me.WallColisionToolStripMenuItem})
         Me.NewGameToolStripMenuItem.Name = "NewGameToolStripMenuItem"
-        Me.NewGameToolStripMenuItem.Size = New System.Drawing.Size(125, 22)
+        Me.NewGameToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.NewGameToolStripMenuItem.Text = "New Game"
         '
         'BlocToolStripMenuItem
         '
         Me.BlocToolStripMenuItem.Name = "BlocToolStripMenuItem"
-        Me.BlocToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
-        Me.BlocToolStripMenuItem.Text = "Free"
+        Me.BlocToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.BlocToolStripMenuItem.Text = "Collision Free"
         '
         'WallColisionToolStripMenuItem
         '
         Me.WallColisionToolStripMenuItem.Name = "WallColisionToolStripMenuItem"
-        Me.WallColisionToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
-        Me.WallColisionToolStripMenuItem.Text = "Wall Colision"
+        Me.WallColisionToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.WallColisionToolStripMenuItem.Text = "Wall Collision"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(125, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'PauseToolStripMenuItem
         '
         Me.PauseToolStripMenuItem.Name = "PauseToolStripMenuItem"
-        Me.PauseToolStripMenuItem.Size = New System.Drawing.Size(125, 22)
+        Me.PauseToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.PauseToolStripMenuItem.Text = "Pause"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(48, 16)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
-        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(40, 20)
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(40, 16)
         Me.HelpToolStripMenuItem.Text = "Help"
         '
         'main
@@ -177,15 +135,15 @@ Partial Class main
         Me.BackColor = System.Drawing.Color.Black
         Me.BackgroundImage = Global.snake.My.Resources.Resources.rsz_start1
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.ClientSize = New System.Drawing.Size(661, 510)
+        Me.ClientSize = New System.Drawing.Size(650, 510)
         Me.Controls.Add(Me.status)
         Me.Controls.Add(Me.MenuStrip1)
         Me.DoubleBuffered = True
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.MenuStrip1
         Me.MaximizeBox = False
-        Me.MaximumSize = New System.Drawing.Size(669, 537)
-        Me.MinimumSize = New System.Drawing.Size(669, 537)
+        Me.MaximumSize = New System.Drawing.Size(658, 537)
+        Me.MinimumSize = New System.Drawing.Size(658, 537)
         Me.Name = "main"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Snake"
@@ -199,12 +157,7 @@ Partial Class main
     End Sub
     Friend WithEvents tmr As System.Windows.Forms.Timer
     Friend WithEvents status As System.Windows.Forms.StatusStrip
-    Friend WithEvents tss1 As System.Windows.Forms.ToolStripStatusLabel
-    Friend WithEvents tss0 As System.Windows.Forms.ToolStripStatusLabel
-    Friend WithEvents tss2 As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents tss3 As System.Windows.Forms.ToolStripStatusLabel
-    Friend WithEvents tssSnakeLength As System.Windows.Forms.ToolStripStatusLabel
-    Friend WithEvents tssSnakeSpeed As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents NewGameToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
